@@ -41,6 +41,6 @@ print(uncommon(a5,b5))
 ['firstly', 'this', 'first', 'next', 'second']
 ['firstly', 'this', 'first', 'next', 'second']
 ['firstly', 'this', 'is', 'the', 'first', 'string', 'next', 'second']
-[]
+Empty Strings
 ['next', 'second']
 '''
