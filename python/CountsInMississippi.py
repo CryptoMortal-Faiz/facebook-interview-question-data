@@ -16,3 +16,14 @@ print(find_s(' '))
 print(find_s(' s '))
 print(find_s(''))
 print(find_s('facebook interview for Data Engineer'))
+
+''' results for each print
+4
+0
+4
+0
+1
+Empty String
+0
+'''
+
