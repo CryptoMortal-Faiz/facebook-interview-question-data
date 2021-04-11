@@ -8,3 +8,10 @@ def find_s(str):
     if i == 's':
       count += 1
   return count
+
+print(find_s('mississippi'))
+print(find_s('facebook'))
+print(find_s('miSsisSippi'))
+print(find_s(''))
+print(find_s(' s '))
+print(find_s(''))
