@@ -1,2 +1,2 @@
-## Find uncommon words between two arrays
+## Find uncommon words between two arrays 
 
