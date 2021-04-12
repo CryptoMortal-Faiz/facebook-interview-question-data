@@ -32,6 +32,23 @@ def get_dict_key(my_dict):
         first_key = keys[0]
     return first_key
 
+##### Approach 2 (Easier)
+def get_dict_key(my_dict):
+    
+    if not my_dict:
+        return "Empty Dict"
+    
+    values = set(my_dict.values())
+    res = sorted(values,reverse = True)
+    
+    if len(res) <= 1:
+        return "No second max"
+    secondmax = res[1]
+    
+    keys = [k for k,v in my_dict.items() if v == secondmax]
+    keys.sort()
+    return keys[0]
+     
 # Driver  
 print(get_dict_key({"java":100, "python":100, "c":10, "sql":109}))
 print(get_dict_key({}))
