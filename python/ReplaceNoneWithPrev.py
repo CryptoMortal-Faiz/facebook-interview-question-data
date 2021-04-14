@@ -1,15 +1,11 @@
-def replace_none(ls):
-  t = 0
-  rs = []
-  for i in ls:
-    if i is not None:
-      rs.append(i)
-      t = i
-    else:
-      rs.append(t)
- 
-  rs = [None if x == 0 else x for x in rs]
-  return rs
+def replace_none(arr):
+    if len(arr) == 0 or all(x == None for x in arr):
+        return "No inp"
+    for i in range(len(arr)):
+        if arr[i] == None:
+            arr[i] = arr[i-1]
+    return arr
+
     
 a1 = [None,1,2,None,None,3,None]
 a2 = [None]
