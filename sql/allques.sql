@@ -69,4 +69,49 @@ select distinct brand_names from sales s inner join products p
 on s.product_id = p.product_id
 group by brand_names having AVG(price) > 3 and count(distinct product_id) > 5
 
+-- what %age of products have both low fat and recycable .
+select
+COUNT(CASE WHEN is_low_fat_flg ='Y' and is_recyclable_flg ='Y' THEN product_id END)*100
+/COUNT(product_id) as prectg
+FROM PRODUCTS
 
+-- find top 5 sales products having promotions
+
+select product_id
+from sales
+where promotion_id is not null
+group by product_id
+order by sum(units_sold * store_cost) desc
+limit 5
+
+-- what %age of sales happened on first and last day of the promotion
+-- Not sure if this asked for all promotions or % for each promotion. in case all -
+SELECT Round(Sum(
+CASE
+WHEN Min(start_date) = transaction_date THEN 1
+WHEN Max(end_date) = transaction_date THEN 1
+ELSE 0
+END) 100/ Count(), 2)
+FROM sales s
+JOIN promotions p s.promotion_id = p.promotion_id
+
+-- What are the top five (ranked in decreasing order) single-channel media types that correspond to the most money the grocery chain had spent on its promotional campaigns?
+select media_type
+from promotions
+order by cost desc
+limit 5
+
+-- the proportion of valid sales that occurred on certain dates.
+select
+sum(case when transaction_date = 'certain_date' then 1 end)/count(*)
+from sales
+where valid sales
+
+-- Manager want to analyze the how the promotions on certain products are performing.find how the the percent of promoted sales?
+count of promoted sales* 100 /total sale
+
+-- Get the top3 product class_id by the total sales.
+select product_class_id
+from product join sales on product_id
+order by sum(units * store_cost) desc
+limit 3
