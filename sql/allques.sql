@@ -71,9 +71,15 @@ group by brand_names having AVG(price) > 3 and count(distinct product_id) > 5
 
 -- what %age of products have both low fat and recycable .
 select
-COUNT(CASE WHEN is_low_fat_flg ='Y' and is_recyclable_flg ='Y' THEN product_id END)*100
-/COUNT(product_id) as prectg
-FROM PRODUCTS
+sum(case when is_low_fat = 1 and is_recyclable = 1 then 1 else 0 end) * 100.0 / count(*) as percentage
+from product
+
+select s.promotion_id,
+ round((sum(case when s.transaction_date = (p.promo_start_date) 
+            or s.transaction_date = (p.promo_end_date) then (store_cost * units_sold) else 0 end) * 100.0
+ / sum((store_cost * units_sold))),2)
+ from sales s inner join  promotion p on p.promotion_id = s.promotion_id
+ group by s.promotion_id
 
 -- find top 5 sales products having promotions
 
