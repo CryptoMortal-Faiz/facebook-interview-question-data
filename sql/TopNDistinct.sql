@@ -10,7 +10,7 @@ ORDER BY SALARY
 WITH RESULT AS
 (
     SELECT SALARY,
-           DENSE_RANK() OVER (ORDER BY SALARY DESC) AS DENSERANK
+           DENSE_RANK() OVER (ORDER BY SALARY DESC) AS DENSERANK -- Add partition by column_name for highest specific  column
     FROM EMPLOYEES
 )
 SELECT TOP 1 SALARY
