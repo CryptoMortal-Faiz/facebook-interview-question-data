@@ -130,12 +130,39 @@ END) 100/ Count(), 2)
 FROM sales s
 JOIN promotions p s.promotion_id = p.promotion_id
 
+-------------------------------------------------------------------------------------------------------------------------------------
 -- What are the top five (ranked in decreasing order) single-channel media types that correspond to the most money the grocery chain had spent on its promotional campaigns?
 select media_type
 from promotions
 order by cost desc
 limit 5
 
+--If the use case is, multiple media_type can have same cost and all of them need to be brought in, then query would be something like this:
+;with cte as
+(
+select media_type
+,sum(cost) as total_cost
+from Promotions
+where media_type not like '%,%'
+group by media_type
+), ranking as
+(
+select media_type
+,dense_rank() over (order by total_cost desc) as rnk
+from cte
+)
+select media_type
+from ranking
+where rnk<=5;
+
+--But if we need to bring in just top 5 even if some of them can same cost, then query would be something like this:
+select top 5 media_type
+from Promotions
+where media_type not like '%,%'
+group by media_type
+order by sum(cost) desc;
+
+-------------------------------------------------------------------------------------------------------------------------------------
 -- the proportion of valid sales that occurred on certain dates.
 select
 sum(case when transaction_date = 'certain_date' then 1 end)/count(*)
