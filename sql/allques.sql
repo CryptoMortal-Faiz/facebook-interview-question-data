@@ -150,3 +150,14 @@ from
 sales s
 inner join product p on s.product_id=p.product_id
 where p.product_name='Certain Product'
+
+-- Which product had the highest sales with promotions and sales ( basically a where clause on 2 flags)
+
+select product_name, sum(store_sales) as sales
+from sales s
+join products p
+on s.product_id = p.product_id
+where promotion_id is not null
+group by product_id
+order by sales desc
+LIMIT 1
