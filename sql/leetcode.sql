@@ -96,3 +96,14 @@ SELECT distinct a.project_id, a.employee_id
 FROM cte JOIN Project a ON cte.employee_id = a.employee_id
 and cte.project_id = a.project_id
 where rnk = 1;
+
+---------------------------------------------------------------------------------------------------
+-- Write a SQL query to rank scores. If there is a tie between two scores, both should have the same ranking.
+-- Note that after a tie, the next ranking number should be the next consecutive integer value. In other words, there should be no "holes" between ranks.
+select c.score, d.ran as 'Rank' from (
+select a.score, ROW_NUMBER() OVER (ORDER BY a.score desc) AS ran from
+(select distinct score from Scores) as a ) as d
+inner join
+Scores as c
+on c.score = d.score
+order by ran asc
