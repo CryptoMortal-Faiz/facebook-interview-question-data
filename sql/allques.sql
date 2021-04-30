@@ -33,7 +33,6 @@ customers
 | gender | varchar |
 | date_account_opened | date |
 
-
 --  What brands have an average price above $3 and contain at least 2 different products?
 select brand_name
 from product
@@ -48,7 +47,38 @@ else 0
 end)*100.0/count(*),2)
 from sales;
 
--- what are the top 3 selling product classes by total sales?
+-- what %age of products have both low fat and recycable---
+select sum(case when is_low_fat = 1 and is_recyclable = 1 then 1 else 0 end) * 100.0 / count(*) as percentage
+from product
+
+-- find top 5 sales products having promotions-------------
+ select top 5 product_id from sales
+ where promotion_id is not null
+ group by product_id
+ order by sum(store_cost * units_sold) desc
+
+-- what %age of sales happened on first and last day of the promotion-------
+select s.promotion_id,
+ round((sum(case when s.transaction_date = (p.promo_start_date) 
+            or s.transaction_date = (p.promo_end_date) then (store_cost * units_sold) else 0 end) * 100.0
+ / sum((store_cost * units_sold))),2)
+ from sales s inner join  promotion p on p.promotion_id = s.promotion_id
+ group by s.promotion_id
+
+-- Which product had the highest sales with promotions-------
+ select s.product_id, p.product_name, sum (s.store_cost * s.units_sold) 
+ from sales s, product p
+ where s.product_id = p.product_id and s.product_id is not null
+ group by s.product_id , p.product_name
+ order by sum (s.store_cost * s.units_sold) desc
+ 
+-----top 3 product classes by total sales----------------
+select top 3 p.product_class_name, sum(s.units_sold * s.store_cost) as total_sale
+from sales s, product p
+where p.product_id = s.product_id
+group by p.product_class_name
+order by sum(s.units_sold * s.store_cost) desc 
+
 select p.product_class_id
 from
 sales s
@@ -82,7 +112,6 @@ select s.promotion_id,
  group by s.promotion_id
 
 -- find top 5 sales products having promotions
-
 select product_id
 from sales
 where promotion_id is not null
@@ -114,10 +143,10 @@ from sales
 where valid sales
 
 -- Manager want to analyze the how the promotions on certain products are performing.find how the the percent of promoted sales?
-count of promoted sales* 100 /total sale
-
--- Get the top3 product class_id by the total sales.
-select product_class_id
-from product join sales on product_id
-order by sum(units * store_cost) desc
-limit 3
+Select  coalesce(round(sum(
+ case when promotion_id is not null
+ then (store_sales*unit_sold)  else 0 end)) / sum(store_sales*unit_sold)*100 ),2),0)
+from
+sales s
+inner join product p on s.product_id=p.product_id
+where p.product_name='Certain Product'
